@@ -1,4 +1,4 @@
-from mock_data import LOGISTICS, ORDERS
+from mini_ecom_agent.tools.mock_data import LOGISTICS, ORDERS
 
 
 def query_logistics(order_id: str) -> dict:

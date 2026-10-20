@@ -10,6 +10,8 @@ from mini_ecom_agent.prompts.customer_service import SYSTEM_PROMPT
 from mini_ecom_agent.schemas.response import CustomerServiceResponse
 from rich import print as rprint
 
+from mini_ecom_agent.tools.register import TOOL_DEFINITIONS, execute_tool
+
 OUTPUT_FORMAT_PROMPT = (
     "\n\n## 输出格式\n"
     "只输出一个 JSON 对象，不要包含 markdown 代码块或任何额外文字。"
@@ -58,6 +60,8 @@ class EcomAgent:
 
         self.raw_messages = [] # 原始对话内容
         self.summary :Optional[str] = None
+
+        self.max_react_steps = settings.max_react_steps
         load = load_session(self.session_path)
         if load:
             self.summary = load["summary"]
@@ -94,16 +98,15 @@ class EcomAgent:
         """处理用户输入：ReAct 循环 → 结构化提取 → 返回结果"""
         self.raw_messages.append({"role":"user","content":user_input})
 
-        content = self._complete()
-        parsed = _parse_response(content)
-        print("parsed : ",parsed)
+        final_text = self._react_loop()
+        result = self._extract_structured_response(final_text)
         # 历史里只保存干净的 JSON，避免把模型追加的闲聊文字带入后续上下文
-        self.raw_messages.append({"role": "assistant", "content": parsed.model_dump_json()})
+        self.raw_messages.append({"role": "assistant", "content": result.model_dump_json(ensure_ascii=False)})
         if len(self.raw_messages) > self.history_threshold:
             self._compress_history()
 
         save_session(self.session_path, self.raw_messages, self.summary)
-        return parsed
+        return result
 
     def reset(self):
         """重置对话历史，并删除持久化文件"""
@@ -122,8 +125,8 @@ class EcomAgent:
         拼装完整的LLM信息列表，system_prompt + (summary system) + 原始历史
         """
         messages: list[dict] = [
-            # DeepSeek 的 json_object 模式要求 prompt 中出现 "json"，必须带上输出格式约束
-            {"role": "system", "content": SYSTEM_PROMPT + OUTPUT_FORMAT_PROMPT}
+            # ReAct 阶段让模型用自然语言回答并调用工具，结构化提取在 _extract_structured_response 中单独做
+            {"role": "system", "content": SYSTEM_PROMPT}
         ]
         if self.summary:
             messages.append(
@@ -139,6 +142,11 @@ class EcomAgent:
         """把历史中的 assistant JSON 还原成自然语言，便于模型理解自己说过的话"""
         rendered: list[dict] = []
         for msg in self.raw_messages:
+            # tool 消息和带 tool_calls 的 assistant 消息必须原样保留，否则后续请求会不合法
+            if msg["role"] == "tool" or msg.get("tool_calls"):
+                rendered.append(msg)
+                continue
+
             content = msg["content"]
             if msg["role"] == "assistant":
                 try:
@@ -156,8 +164,14 @@ class EcomAgent:
         压缩除最近k条以前的信息成summary
         """
         keep = self.history_keep_recent
-        old_messages = self.raw_messages[:-keep]
-        recent = self.raw_messages[-keep:]
+        cut = max(0, len(self.raw_messages) - keep)
+        # 切割点必须落在 user 消息上，避免留下没有对应 tool_calls 的 tool 消息等非法片段
+        while cut > 0 and self.raw_messages[cut]["role"] != "user":
+            cut -= 1
+        old_messages = self.raw_messages[:cut]
+        recent = self.raw_messages[cut:]
+        if not old_messages:
+            return
 
         new_summary = summarize(
             client=self.client,
@@ -171,6 +185,101 @@ class EcomAgent:
             f"\n💾 [已压缩 {len(old_messages)} 条老消息 → summary "
             f"({len(new_summary)} 字)]\n"
         )
+
+    def _react_loop(self):
+        """ReAct 循环：调用 LLM → 执行工具 → 观察结果 → 重复，直到模型给出最终回答。"""
+        for step in range(self.max_react_steps):
+            messages = self._build_messages()
+
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                temperature=self.temperature,
+                tools=TOOL_DEFINITIONS,
+            )
+            assistant_msg = response.choices[0].message
+
+            if assistant_msg.content:
+                self._print_thought(assistant_msg.content)
+            if not assistant_msg.tool_calls:
+                # 最终回复由 chat() 统一以结构化 JSON 形式写入历史
+                return assistant_msg.content or ""
+
+            msg_dict = {"role": "assistant", "content": assistant_msg.content}
+
+            msg_dict["tool_calls"] = [
+                {
+                    "id": tc.id,
+                    "type": "function",
+                    "function": {
+                        "name": tc.function.name,
+                        "arguments": tc.function.arguments,
+                    },
+                } for tc in assistant_msg.tool_calls]
+            self.raw_messages.append(msg_dict)
+
+            for tc in assistant_msg.tool_calls:
+                func_name = tc.function.name
+                func_args = json.loads(tc.function.arguments)
+
+                self._print_action(func_name, func_args)
+                result_str = execute_tool(func_name, func_args)
+                self._print_observation(result_str)
+
+                self.raw_messages.append({
+                    "role": "tool",
+                    "tool_call_id": tc.id,
+                    "content": result_str,
+                })
+
+        messages = self._build_messages()
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            temperature=self.temperature,
+        )
+        content = response.choices[0].message.content or ""
+        self.raw_messages.append({"role": "assistant", "content": content})
+        return content
+
+    def _extract_structured_response(self, text: str) -> CustomerServiceResponse:
+        """从最终文本中提取结构化元数据（意图、置信度等）。"""
+        schema = json.dumps(CustomerServiceResponse.model_json_schema(), ensure_ascii=False)
+        system_content = (
+            "基于以下客服回复内容，提取结构化信息。reply 字段直接使用原文，不要修改或缩减。"
+            "只输出一个 JSON 对象，必须符合以下 JSON Schema：\n" + schema
+        )
+        last_finish_reason = None
+        for temperature in (0.0, 0.5, 1.0):
+            # DeepSeek 不支持 json_schema（beta.parse），这里同样用 json_object 模式
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": system_content},
+                    {"role": "user", "content": text},
+                ],
+                temperature=temperature,
+                response_format={"type": "json_object"},
+            )
+            last_finish_reason = response.choices[0].finish_reason
+            content = (response.choices[0].message.content or "").strip()
+            if content:
+                return _parse_response(content)
+
+        raise RuntimeError(f"结构化信息提取返回空内容（finish_reason={last_finish_reason}），已重试 3 次")
+
+    def _print_thought(self, text: str) -> None:
+        print(f"\n💭 [思考] {text}")
+
+    def _print_action(self, func_name: str, func_args: dict) -> None:
+        args_str = ", ".join(f"{k}={v!r}" for k, v in func_args.items())
+        print(f"🔧 [调用工具] {func_name}({args_str})")
+
+    def _print_observation(self, result: str) -> None:
+        display = result if len(result) <= 300 else result[:300] + "..."
+        print(f"📋 [工具结果] {display}")
+
+
 
 # rprint(response) 返回
 

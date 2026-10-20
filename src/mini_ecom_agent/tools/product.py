@@ -1,4 +1,4 @@
-from mock_data import PRODUCTS
+from mini_ecom_agent.tools.mock_data import PRODUCTS
 
 
 def query_product(keyword: str) -> dict:

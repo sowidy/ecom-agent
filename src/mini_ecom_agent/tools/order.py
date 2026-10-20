@@ -1,4 +1,4 @@
-from mock_data import ORDERS
+from mini_ecom_agent.tools.mock_data import ORDERS
 
 
 def query_order(order_id: str) -> dict:

@@ -3,10 +3,10 @@
 import json
 from typing import Callable
 
-from tools.order import query_order
-from tools.product import query_product
-from tools.logistics import query_logistics
-from tools.refund import apply_refund
+from mini_ecom_agent.tools.order import query_order
+from mini_ecom_agent.tools.product import query_product
+from mini_ecom_agent.tools.logistics import query_logistics
+from mini_ecom_agent.tools.refund import apply_refund
 
 _TOOL_MAP: dict[str, Callable] = {
     "query_order": query_order,

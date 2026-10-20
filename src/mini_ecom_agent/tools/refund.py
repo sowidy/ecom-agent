@@ -1,4 +1,4 @@
-from mock_data import ORDERS
+from mini_ecom_agent.tools.mock_data import ORDERS
 
 
 def apply_refund(order_id: str, reason: str) -> dict:
