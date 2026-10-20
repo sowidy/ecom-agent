@@ -8,9 +8,8 @@ from mini_ecom_agent.agents.summarizer import summarize
 from mini_ecom_agent.config.settings import settings
 from mini_ecom_agent.prompts.customer_service import SYSTEM_PROMPT
 from mini_ecom_agent.schemas.response import CustomerServiceResponse
-from rich import print as rprint
 
-from mini_ecom_agent.tools.register import TOOL_DEFINITIONS, execute_tool
+from mini_ecom_agent.tools.manager import ToolManager
 
 OUTPUT_FORMAT_PROMPT = (
     "\n\n## 输出格式\n"
@@ -41,7 +40,8 @@ def _parse_response(text: str) -> CustomerServiceResponse:
 class EcomAgent:
     # """电商客服 Agent —— 第一期：基于纯 Prompt + 结构化输出"""
     # """电商客服 Agent —— 第二期：多轮对话管理（summary 压缩 + JSON 持久化）"""
-    """电商客服 Agent —— 第三期：ReAct Agent + Function Calling"""
+    # """电商客服 Agent —— 第三期：ReAct Agent + Function Calling"""
+    """电商客服 Agent —— 第四期：MCP (Model Context Protocol) 集成"""
 
     def __init__(self,session_path:Optional[str]=None):
         self.client = OpenAI(
@@ -61,6 +61,11 @@ class EcomAgent:
         self.raw_messages = [] # 原始对话内容
         self.summary :Optional[str] = None
 
+        self.tool_manager = ToolManager(
+            use_mcp=settings.mcp_enabled,
+            mcp_server_url=settings.mcp_server_url,
+        )
+
         self.max_react_steps = settings.max_react_steps
         load = load_session(self.session_path)
         if load:
@@ -74,25 +79,6 @@ class EcomAgent:
         原始条数
         """
         return len(self.raw_messages)
-
-    def _complete(self) -> str:
-        """调用模型并返回 content；DeepSeek 偶发返回纯空白内容，换温度重试几次"""
-        last_finish_reason = None
-        for temperature in (self.temperature, 1.0, 0.5, 0.9):
-            # DeepSeek 不支持 json_schema，这里用 json_object 模式 + Prompt 约束 Schema
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=self._build_messages(),
-                temperature=temperature,
-                response_format={"type": "json_object"},
-            )
-            choice = response.choices[0]
-            last_finish_reason = choice.finish_reason
-            content = (choice.message.content or "").strip()
-            if content:
-                return content
-
-        raise RuntimeError(f"模型返回空内容（finish_reason={last_finish_reason}），已重试 4 次")
 
     def chat(self, user_input) -> CustomerServiceResponse:
         """处理用户输入：ReAct 循环 → 结构化提取 → 返回结果"""
@@ -119,6 +105,9 @@ class EcomAgent:
         显示保存
         """
         save_session(self.session_path, self.raw_messages, self.summary)
+
+    def close(self):
+        self.tool_manager.close()
 
     def _build_messages(self):
         """
@@ -195,7 +184,7 @@ class EcomAgent:
                 model=self.model,
                 messages=messages,
                 temperature=self.temperature,
-                tools=TOOL_DEFINITIONS,
+                tools=self.tool_manager.tool_definitions,
             )
             assistant_msg = response.choices[0].message
 
@@ -223,7 +212,8 @@ class EcomAgent:
                 func_args = json.loads(tc.function.arguments)
 
                 self._print_action(func_name, func_args)
-                result_str = execute_tool(func_name, func_args)
+                # result_str = execute_tool(func_name, func_args)
+                result_str = self.tool_manager.execute_tools(func_name, func_args)
                 self._print_observation(result_str)
 
                 self.raw_messages.append({
@@ -238,9 +228,8 @@ class EcomAgent:
             messages=messages,
             temperature=self.temperature,
         )
-        content = response.choices[0].message.content or ""
-        self.raw_messages.append({"role": "assistant", "content": content})
-        return content
+        # 达到最大步数仍未收敛，返回兜底回复（由 chat() 统一写入历史）
+        return response.choices[0].message.content or ""
 
     def _extract_structured_response(self, text: str) -> CustomerServiceResponse:
         """从最终文本中提取结构化元数据（意图、置信度等）。"""

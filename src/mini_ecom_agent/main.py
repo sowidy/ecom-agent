@@ -31,6 +31,7 @@ def main():
             user_input = input("👤 你: ").strip()
         except (EOFError, KeyboardInterrupt):
             agent.save()
+            agent.close()
             print("\n再见，欢迎下次光临！")
             break
 
@@ -39,6 +40,7 @@ def main():
 
         if user_input.lower() in ("quit", "exit"):
             agent.save()
+            agent.close()
             print("再见，欢迎下次光临！")
             break
 
