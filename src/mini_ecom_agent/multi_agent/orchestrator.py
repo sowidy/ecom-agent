@@ -57,6 +57,18 @@ class MultiAgentOrchestrator:
         if settings.memory_enabled:
             from mini_ecom_agent.tools.memory_tool import set_memory_manager
             set_memory_manager(self.memory_manager)
+
+
+
+        from mini_ecom_agent.agents.skills import SkillManager
+        self.skills_manager = SkillManager(
+            skills_dir=settings.skills_dir,
+            enabled=settings.skills_enabled,
+        )
+        if settings.skills_enabled:
+            from mini_ecom_agent.tools.skill_tool import set_skill_manager
+            set_skill_manager(self.skills_manager)
+
         self.raw_messages:list[dict]=[]
         self.summary :Optional[str]=None
 
@@ -120,7 +132,11 @@ class MultiAgentOrchestrator:
 
     def _build_messages(self, agent:SubAgent):
         """用子 Agent 的 system prompt 构建消息列表。"""
-        messages:list[dict]=[{"role":"system","content":agent.system_prompt}]
+        system_content = agent.system_prompt
+        if self.skills_manager and self.skills_manager.enabled:
+            system_content += self.skills_manager.build_catalog_prompt()
+
+        messages:list[dict]=[{"role":"system","content":system_content}]
         messages.extend(self.memory_manager.build_memory_prompt_sections())
         if self.summary:
             messages.append({"role":"system","content":f"以下是此前对话的摘要，用于延续上下文记忆：\n{self.summary}"})

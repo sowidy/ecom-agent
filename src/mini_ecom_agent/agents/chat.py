@@ -41,7 +41,8 @@ class EcomAgent:
     # """电商客服 Agent —— 第一期：基于纯 Prompt + 结构化输出"""
     # """电商客服 Agent —— 第二期：多轮对话管理（summary 压缩 + JSON 持久化）"""
     # """电商客服 Agent —— 第三期：ReAct Agent + Function Calling"""
-    """电商客服 Agent —— 第四期：MCP (Model Context Protocol) 集成"""
+    # """电商客服 Agent —— 第四期：MCP (Model Context Protocol) 集成"""
+    """电商客服 Agent —— 第八期：Skill 可复用能力模块"""
 
     def __init__(self,session_path:Optional[str]=None):
         self.client = OpenAI(
@@ -57,9 +58,7 @@ class EcomAgent:
         self.session_path = session_path or settings.session_path
         self.history_threshold = settings.history_threshold
         self.history_keep_recent = settings.history_keep_recent
-
-        self.raw_messages = [] # 原始对话内容
-        self.summary :Optional[str] = None
+        self.max_react_steps = settings.max_react_steps
 
         self.tool_manager = ToolManager(
             use_mcp=settings.mcp_enabled,
@@ -74,12 +73,21 @@ class EcomAgent:
             memory_enabled=settings.memory_enabled,
             max_facts_limit=settings.max_facts_limit,
         )
-
         if settings.memory_enabled:
             from mini_ecom_agent.tools.memory_tool import set_memory_manager
             set_memory_manager(self.memory_manager)
 
-        self.max_react_steps = settings.max_react_steps
+        from mini_ecom_agent.agents.skills import SkillManager
+        self.skills_manager = SkillManager(
+            skills_dir=settings.skills_dir,
+            enabled=settings.skills_enabled,
+        )
+        if settings.skills_enabled:
+            from mini_ecom_agent.tools.skill_tool import set_skill_manager
+            set_skill_manager(self.skills_manager)
+
+        self.raw_messages = [] # 原始对话内容
+        self.summary :Optional[str] = None
         loaded = load_session(self.session_path)
         if loaded:
             self.summary = loaded["summary"]
@@ -131,9 +139,13 @@ class EcomAgent:
         """
         拼装完整的LLM信息列表，system_prompt + (summary system) + 原始历史
         """
+        system_content = SYSTEM_PROMPT
+        if self.skills_manager and self.skills_manager.enabled:
+            system_content += self.skills_manager.build_catalog_prompt()
+
         messages: list[dict] = [
             # ReAct 阶段让模型用自然语言回答并调用工具，结构化提取在 _extract_structured_response 中单独做
-            {"role": "system", "content": SYSTEM_PROMPT}
+            {"role": "system", "content": system_content}
         ]
         messages.extend(self.memory_manager.build_memory_prompt_sections())
         if self.summary:
