@@ -3,19 +3,41 @@
 import json
 from typing import Callable
 
-from mini_ecom_agent.tools.order import query_order
+from mini_ecom_agent.tools.knowledge import search_knowledge
+from mini_ecom_agent.tools.memory_tool import recall_user_memory
+from mini_ecom_agent.tools.order import list_user_orders, query_order
 from mini_ecom_agent.tools.product import query_product
 from mini_ecom_agent.tools.logistics import query_logistics
 from mini_ecom_agent.tools.refund import apply_refund
 
 _TOOL_MAP: dict[str, Callable] = {
     "query_order": query_order,
+    "list_user_orders": list_user_orders,
     "query_product": query_product,
     "query_logistics": query_logistics,
     "apply_refund": apply_refund,
+    "search_knowledge": search_knowledge,
+    "recall_user_memory": recall_user_memory,
 }
 
 TOOL_DEFINITIONS: list[dict] = [
+    {
+        "type": "function",
+        "function": {
+            "name": "list_user_orders",
+            "description": "按用户名查询该用户的订单摘要。用户未提供订单号时，先确认用户名再调用；不接受空用户名",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "user_name": {
+                        "type": "string",
+                        "description": "用户姓名，必须由用户提供或在当前对话中确认，例如「小明」",
+                    }
+                },
+                "required": ["user_name"],
+            },
+        },
+    },
     {
         "type": "function",
         "function": {
@@ -85,6 +107,54 @@ TOOL_DEFINITIONS: list[dict] = [
                     },
                 },
                 "required": ["order_id", "reason"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "search_knowledge",
+            "description": (
+                "检索并夕夕的政策与帮助文档（退换货政策、配送说明、会员权益、常见问题 FAQ）。"
+                "当顾客询问规则、流程、时效、是否支持等政策类问题时使用，"
+                "比如「能退货吗」「多久到账」「钻石会员有什么权益」「偏远地区包邮吗」。"
+                "返回 Top-K 命中片段及来源文档，请基于检索结果回答，不要编造政策"
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "用顾客的原问题或一句简洁中文描述要查的政策点",
+                    },
+                    "top_k": {
+                        "type": "integer",
+                        "description": "返回片段数，默认 3，最大 5",
+                        "default": 3,
+                    },
+                },
+                "required": ["query"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "recall_user_memory",
+            "description": (
+                "查询当前用户的记忆信息，包括本次对话提取的短期记忆和跨会话的长期记忆。"
+                "当需要回顾用户的偏好、历史问题、会员信息等时使用。"
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "可选的查询关键词，用于过滤记忆内容",
+                        "default": "",
+                    }
+                },
+                "required": [],
             },
         },
     },

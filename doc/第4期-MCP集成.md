@@ -14,7 +14,7 @@
 | `session.list_tools()` | 客户端获取工具名、说明、参数 Schema | 否 |
 | `session.call_tool("query_order", ...)` | 客户端请求服务端执行工具，取得结果 | 是 |
 
-因此，运行 `test/test_converter.py --live` 并看到“转换前：MCP Tool 原始对象（4 个）”，只证明工具发现成功。该脚本没有调用订单查询工具。
+因此，运行 `test/test_converter.py --live` 并看到“转换前：MCP Tool 原始对象（4 个）”，只证明工具发现成功。该脚本没有调用订单查询工具。这个数量是当时的输出；当前服务端新增了工具，实际发现数量以 `list_tools()` 返回为准。
 
 ## 2. 服务端如何提供订单查询工具
 
@@ -338,7 +338,7 @@ uv run python src/mini_ecom_agent/main.py
 确认启动时显示：
 
 ```text
-[MCP] 已连接 http://127.0.0.1:9123/mcp，发现 4 个工具
+[MCP] 已连接 http://127.0.0.1:9123/mcp，发现 6 个工具
 ```
 
 然后输入：
@@ -375,7 +375,7 @@ uv run python src/mini_ecom_agent/main.py
 | 现象 | 原因与检查位置 |
 | --- | --- |
 | 无法连接 `127.0.0.1:9123` | 检查终端 A 是否已启动服务、端口是否一致 |
-| 能列出 4 个工具，但没有订单数据 | `list_tools()` 只发现工具，还需执行 `call_tool()` |
+| 能列出 6 个工具，但没有订单数据 | `list_tools()` 只发现工具，还需执行 `call_tool()` |
 | 发现工具成功，调用时报“客户端未连接” | 检查 `_lo1op` 是否已修正为 `_loop` |
 | 关闭 MCP 后客服仍能查订单 | 如果重新启动客服时连接失败，`ToolManager` 会降级使用本地工具 |
 | MCP 未报执行错误，但业务返回 `success: false` | 协议调用完成不代表业务查询成功；检查订单号和业务错误信息 |

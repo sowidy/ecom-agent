@@ -8,6 +8,7 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "chromadb>=1.5.9",
     "mcp>=2.3.0",
     "openai>=3.35.1",
     "pydantic>=2.14.1",

@@ -1,4 +1,5 @@
 import json
+from typing import Optional
 
 from mini_ecom_agent.tools.registry import TOOL_DEFINITIONS as LOCAL_TOOL_DEFINITIONS
 from mini_ecom_agent.tools.registry import execute_tool as local_execute_tool
@@ -13,7 +14,7 @@ def _format_connection_error(error: BaseException) -> str:
 
 class ToolManager:
     """聚合本地工具和 MCP 工具，提供统一的工具定义和调度接口。"""
-    def __init__(self,use_mcp:bool=False, mcp_server_url:str= ""):
+    def __init__(self,use_mcp:bool=False, mcp_server_url:str= "", allowed_tools:Optional[set] = None):
         self._mcp_client = None
         self._tool_source:dict[str,str]=dict()
         self._tools_defs:list[dict]=[]
@@ -22,6 +23,9 @@ class ToolManager:
             self._init_mcp(mcp_server_url)
         else:
             self._init_local()
+
+        if allowed_tools is not None:
+            self._filter_tools(allowed_tools)
 
     def _init_local(self):
         """
@@ -82,3 +86,12 @@ class ToolManager:
         if self._mcp_client:
             self._mcp_client.close()
             self._mcp_client = None
+
+    def _filter_tools(self, allowed:set):
+        """sub agent 只能使用限定的工具，进行过滤"""
+        self._tools_defs = [
+            d for d in self._tools_defs if d['function']['name'] in allowed
+        ]
+        self._tool_source = {
+            k:v for k, v in self._tool_source.items() if k in allowed
+        }

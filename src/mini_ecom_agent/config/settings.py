@@ -22,6 +22,24 @@ class Settings(BaseSettings):
     mcp_enabled: bool = True
     mcp_server_url: str = "http://127.0.0.1:9123/mcp"
 
+    # RAG
+    embedding_api_key:str=""                        # Embedding 服务密钥（与聊天模型独立配置）
+    embedding_base_url:str=""                       # OpenAI 兼容的 Embedding API 地址
+    embedding_model:str="text-embedding-3-small"    # 嵌入模型
+    kb_dir:str="knowledge"                          #
+    rag_backend:str="chroma"                         # 向量后端：numpy（手写余弦，教学透明）/ chroma（向量数据库，生产代表）
+    kb_idx_path:str="sessions/kb_idx.json"          # NumpyBackend 的 JSON 索引路径
+    chroma_persistence_dir:str="sessions/chroma"    # ChromaBackend 的持久化目录
+    chroma_collection:str="ecom-kb"                 # 库名
+
+    multi_agent_enabled:bool=True
+
+    # Memory 配置（第7期）
+    memory_enabled: bool = True
+    memory_dir: str = "sessions/memory"
+    memory_user_id: str = "default"
+    max_facts_limit: int = 50
+
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env",
         env_file_encoding="utf-8",

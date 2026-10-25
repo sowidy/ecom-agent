@@ -7,7 +7,7 @@ from mini_ecom_agent.agents.storage import load_session, delete_session, save_se
 from mini_ecom_agent.agents.summarizer import summarize
 from mini_ecom_agent.config.settings import settings
 from mini_ecom_agent.prompts.customer_service import SYSTEM_PROMPT
-from mini_ecom_agent.schemas.response import CustomerServiceResponse
+from mini_ecom_agent.schemas.response import CustomerServiceResponse, IntentType
 
 from mini_ecom_agent.tools.manager import ToolManager
 
@@ -65,12 +65,27 @@ class EcomAgent:
             use_mcp=settings.mcp_enabled,
             mcp_server_url=settings.mcp_server_url,
         )
+        from mini_ecom_agent.agents.memory import MemoryManager
+        self.memory_manager = MemoryManager(
+            client=self.client,
+            model=self.model,
+            user_id=settings.memory_user_id,
+            memory_dir=settings.memory_dir,
+            memory_enabled=settings.memory_enabled,
+            max_facts_limit=settings.max_facts_limit,
+        )
+
+        if settings.memory_enabled:
+            from mini_ecom_agent.tools.memory_tool import set_memory_manager
+            set_memory_manager(self.memory_manager)
 
         self.max_react_steps = settings.max_react_steps
-        load = load_session(self.session_path)
-        if load:
-            self.summary = load["summary"]
-            self.raw_messages = load["messages"]
+        loaded = load_session(self.session_path)
+        if loaded:
+            self.summary = loaded["summary"]
+            self.raw_messages = loaded["messages"]
+            if loaded.get("short_term_memory"):
+                self.memory_manager.restore_stm(loaded["short_term_memory"])
 
 
     @property
@@ -86,27 +101,30 @@ class EcomAgent:
 
         final_text = self._react_loop()
         result = self._extract_structured_response(final_text)
+        self.memory_manager.update_short_term(self.raw_messages[-6:])
         # 历史里只保存干净的 JSON，避免把模型追加的闲聊文字带入后续上下文
         self.raw_messages.append({"role": "assistant", "content": result.model_dump_json(ensure_ascii=False)})
         if len(self.raw_messages) > self.history_threshold:
             self._compress_history()
 
-        save_session(self.session_path, self.raw_messages, self.summary)
+        save_session(self.session_path, self.raw_messages, self.summary, short_term_memory=self.memory_manager.stm_to_dict())
         return result
 
     def reset(self):
         """重置对话历史，并删除持久化文件"""
         self.raw_messages = []
         self.summary = None
+        self.memory_manager.reset_stm()
         delete_session(self.session_path)
 
     def save(self):
         """
         显示保存
         """
-        save_session(self.session_path, self.raw_messages, self.summary)
+        save_session(self.session_path, self.raw_messages, self.summary, short_term_memory=self.memory_manager.stm_to_dict())
 
     def close(self):
+        self.memory_manager.consolidate_to_ltm(self.raw_messages, self.summary)
         self.tool_manager.close()
 
     def _build_messages(self):
@@ -117,6 +135,7 @@ class EcomAgent:
             # ReAct 阶段让模型用自然语言回答并调用工具，结构化提取在 _extract_structured_response 中单独做
             {"role": "system", "content": SYSTEM_PROMPT}
         ]
+        messages.extend(self.memory_manager.build_memory_prompt_sections())
         if self.summary:
             messages.append(
                 {
@@ -241,19 +260,25 @@ class EcomAgent:
         last_finish_reason = None
         for temperature in (0.0, 0.5, 1.0):
             # DeepSeek 不支持 json_schema（beta.parse），这里同样用 json_object 模式
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": system_content},
-                    {"role": "user", "content": text},
-                ],
-                temperature=temperature,
-                response_format={"type": "json_object"},
-            )
-            last_finish_reason = response.choices[0].finish_reason
-            content = (response.choices[0].message.content or "").strip()
-            if content:
-                return _parse_response(content)
+            try:
+                response = self.client.beta.chat.completions.parse(
+                    model=self.model,
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": (
+                                "基于以下客服回复内容，提取结构化信息。"
+                                "reply 字段直接使用原文，不要修改或缩减。"
+                            ),
+                        },
+                        {"role": "user", "content": text},
+                    ],
+                    temperature=0.0,
+                    response_format=CustomerServiceResponse,
+                )
+                return response.choices[0].message.parsed
+            except Exception:
+                return self._extract_structured_fallback(text)
 
         raise RuntimeError(f"结构化信息提取返回空内容（finish_reason={last_finish_reason}），已重试 3 次")
 
@@ -268,7 +293,35 @@ class EcomAgent:
         display = result if len(result) <= 300 else result[:300] + "..."
         print(f"📋 [工具结果] {display}")
 
-
+    def _extract_structured_fallback(self, text: str) -> CustomerServiceResponse:
+        """当 response_format 不被 API 支持时，用 prompt 引导 JSON 输出。"""
+        intent_values = ", ".join(f'"{e.value}"' for e in IntentType)
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "基于以下客服回复内容，提取结构化信息并输出 JSON。\n"
+                        "reply 字段直接使用原文，不要修改或缩减。\n\n"
+                        "必须严格按照以下 JSON 格式输出（不要加 markdown 代码块）：\n"
+                        "{\n"
+                        f'  "intent": <从以下选择: {intent_values}>,\n'
+                        '  "confidence": <0.0到1.0的浮点数>,\n'
+                        '  "reply": <原文回复内容>,\n'
+                        '  "requires_human": <true或false>,\n'
+                        '  "follow_up_question": <追问问题或null>\n'
+                        "}"
+                    ),
+                },
+                {"role": "user", "content": text},
+            ],
+            temperature=0.0,
+        )
+        raw = response.choices[0].message.content.strip()
+        if raw.startswith("```"):
+            raw = raw.split("\n", 1)[-1].rsplit("```", 1)[0].strip()
+        return CustomerServiceResponse.model_validate_json(raw)
 
 # rprint(response) 返回
 

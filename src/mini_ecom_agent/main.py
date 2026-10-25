@@ -1,4 +1,5 @@
 from agents.chat import EcomAgent
+from mini_ecom_agent.config.settings import settings
 from schemas.response import IntentType
 
 # 意图类型的中文映射
@@ -16,13 +17,22 @@ INTENT_LABELS = {
 
 
 def main():
+    if settings.multi_agent_enabled:
+        from mini_ecom_agent.multi_agent.orchestrator import MultiAgentOrchestrator
+        agent = MultiAgentOrchestrator()
+        mode = "Multi-Agent 协作模式"
+    else:
+        agent = EcomAgent()
+        mode = "ReAct + MCP + RAG"
     print("=" * 50)
-    print("  并夕夕 · 智能客服「小夕」")
+    print(f"  并夕夕 · 智能客服「小夕」（{mode}）")
     print("  输入 quit 或 exit 退出，输入 reset 重置对话")
+    print("  支持工具调用：查订单/商品/物流/退款 + 政策检索 + 用户记忆")
+    print("  输入 quit/exit 退出, reset 重置, memory 查看记忆")
     print("=" * 50)
     print()
 
-    agent = EcomAgent()
+    # agent = EcomAgent()
     if agent.history_size > 0:
         print(f"💬 已恢复上次对话（{agent.history_size} 条历史）\n")
 
@@ -47,6 +57,30 @@ def main():
         if user_input.lower() == "reset":
             agent.reset()
             print("对话已重置。\n")
+            continue
+        if user_input.lower() == "memory":
+            if hasattr(agent, "memory_manager") and agent.memory_manager.memory_enabled:
+                stm = agent.memory_manager.stm
+                ltm = agent.memory_manager.ltm
+                print("\n--- 短期记忆（本次对话）---")
+                if stm.facts:
+                    for f in stm.facts:
+                        print(f"  - {f}")
+                else:
+                    print("  （暂无）")
+                print(f"\n--- 长期记忆（跨会话，用户: {ltm.user_id}）---")
+                if ltm.facts:
+                    for f in ltm.facts:
+                        print(f"  - {f.category}: {f.content}")
+                else:
+                    print("  （暂无）")
+                if ltm.interaction_summaries:
+                    print("\n--- 最近交互 ---")
+                    for s in ltm.interaction_summaries[-3:]:
+                        print(f"  - {s['summary']}")
+                print()
+            else:
+                print("记忆功能未启用\n")
             continue
 
         try:
