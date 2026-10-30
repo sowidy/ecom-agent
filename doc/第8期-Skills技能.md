@@ -135,7 +135,7 @@ print(result["skill_name"], len(result["instructions"]))
 
 在 `SKILLS_DIR` 下创建一个新子目录和 `SKILL.md`，填写非空的 `name`、`description`，再写清适用场景、步骤和失败时如何处理。`name` 是调用 `load_skill` 时使用的精确值，不一定与目录名相同；保持一致更易排查。`description` 应让模型能判断何时使用，不宜把完整业务流程都写进去。
 
-重启 CLI 后先用 `skills` 检查是否发现，再用上面的本地工具调用方式确认能返回正文，最后通过真实对话观察模型是否主动调用。项目的 [test_skills.py](../test/test_skills.py) 包含发现、目录、加载、未知技能、开关和正文延迟加载检查；第 7 项会创建 Agent 并请求模型，需要有效 API 配置，其“主动调用技能”结果受模型决策影响。
+重启 CLI 后先用 `skills` 检查是否发现，再用上面的本地工具调用方式确认能返回正文，最后通过真实对话观察模型是否主动调用。项目的 [test_skills.py](../tests/test_skills.py) 包含发现、目录、加载、未知技能、开关和正文延迟加载检查；第 7 项会创建 Agent 并请求模型，需要有效 API 配置，其“主动调用技能”结果受模型决策影响。
 
 ## 6. 当前实现边界与排查
 

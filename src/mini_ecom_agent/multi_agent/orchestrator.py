@@ -26,7 +26,7 @@ class MultiAgentOrchestrator:
         self.history_threshold=settings.history_threshold
         self.history_keep_recent=settings.history_keep_recent
         self.max_react_steps=settings.max_react_steps
-        self.router=Router(self.client, self.model)
+        self.router=Router(self.client, self.model, max_tokens=settings.router_max_tokens)
         self.agents:dict[str, SubAgent]={}
 
         for key, cfg in AGENT_CONFIG.items():
@@ -100,7 +100,7 @@ class MultiAgentOrchestrator:
         final_text, new_message = agent.handle(messages,self.max_react_steps)
         self.raw_messages.extend(new_message)
 
-        result = self._extruct_structure_response(final_text)
+        result = self._extruct_structure_response(final_text, user_input)
         self.memory_manager.update_short_term(self.raw_messages[-6:])
         self.raw_messages.append({'role':'assistant','content':result.model_dump_json(ensure_ascii=False)})
 
@@ -143,7 +143,7 @@ class MultiAgentOrchestrator:
         messages.extend(self.raw_messages)
         return messages
 
-    def _extruct_structure_response(self, text:str):
+    def _extruct_structure_response(self, text:str, user_input: str = ""):
         try:
             response = self.client.beta.chat.completions.parse(
                 model=self.model,
@@ -152,17 +152,18 @@ class MultiAgentOrchestrator:
                         "role": "system",
                         "content": (
                             "基于以下客服回复内容，提取结构化信息。"
+                            "intent 根据用户本轮请求判断，不因回复中的处理进度改变。"
                             "reply 字段直接使用原文，不要修改或缩减。"
                         ),
                     },
-                    {"role": "user", "content": text},
+                    {"role": "user", "content": f"用户本轮请求：{user_input}\n客服回复：{text}"},
                 ],
                 temperature=0.0,
                 response_format=CustomerServiceResponse,
             )
             return response.choices[0].message.parsed
         except Exception:
-            return self._extract_structured_fallback(text)
+            return self._extract_structured_fallback(text, user_input)
 
     def _compress_history(self):
         keep=self.history_keep_recent
@@ -188,7 +189,7 @@ class MultiAgentOrchestrator:
             f"({len(new_summary)} 字)]\n"
         )
 
-    def _extract_structured_fallback(self, text):
+    def _extract_structured_fallback(self, text, user_input: str = ""):
         """当 response_format 不被 API 支持时，用 prompt 引导 JSON 输出。"""
         intent_values = ", ".join(f'"{e.value}"' for e in IntentType)
         response = self.client.chat.completions.create(
@@ -198,6 +199,7 @@ class MultiAgentOrchestrator:
                     "role": "system",
                     "content": (
                         "基于以下客服回复内容，提取结构化信息并输出 JSON。\n"
+                        "intent 根据用户本轮请求判断，不因回复中的处理进度改变。\n"
                         "reply 字段直接使用原文，不要修改或缩减。\n\n"
                         "必须严格按照以下 JSON 格式输出（不要加 markdown 代码块）：\n"
                         "{\n"
@@ -205,11 +207,11 @@ class MultiAgentOrchestrator:
                         '  "confidence": <0.0到1.0的浮点数>,\n'
                         '  "reply": <原文回复内容>,\n'
                         '  "requires_human": <true或false>,\n'
-                        '  "follow_requestions": <追问问题或null>\n'
+                        '  "follow_requestions": <字符串或null；多个问题合并为一个字符串，不要输出数组>\n'
                         "}"
                     ),
                 },
-                {"role": "user", "content": text},
+                {"role": "user", "content": f"用户本轮请求：{user_input}\n客服回复：{text}"},
             ],
             temperature=0.0,
         )

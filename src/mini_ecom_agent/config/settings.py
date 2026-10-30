@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     chroma_collection:str="ecom-kb"                 # 库名
 
     multi_agent_enabled:bool=True
+    router_max_tokens: int = 1024  # 路由输出预算；推理模型还会占用思考 token
 
     # Memory 配置（第7期）
     memory_enabled: bool = True
@@ -43,6 +44,11 @@ class Settings(BaseSettings):
     # Skill 配置（第8期）
     skills_enabled: bool = True
     skills_dir: str = str(BASE_DIR / "src" / "mini_ecom_agent" / "skills")
+
+    # Evaluation 配置（第9期，离线评估工具，无聊天开关）
+    eval_dataset_path: str = str(BASE_DIR / "src" / "mini_ecom_agent" / "evaluation" / "cases.json")
+    eval_use_judge: bool = True  # 是否启用 LLM-as-judge（质量/幻觉/过程合理性）
+    eval_pass_threshold: float = 0.6  # 单维度通过阈值（judge 归一化到 0-1 后比较）
 
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env",

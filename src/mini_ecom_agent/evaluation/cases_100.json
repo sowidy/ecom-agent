@@ -1,0 +1,1712 @@
+{
+  "cases": [
+    {
+      "id": "order_01",
+      "description": "当前状态：shipped",
+      "turns": [
+        "请查一下订单 ORD-20240115-001 的当前状态。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "ORD-20240115-001"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "order_02",
+      "description": "下单金额：shipped",
+      "turns": [
+        "订单 ORD-20240115-001 是什么时候下单的，实付多少钱？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "ORD-20240115-001"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "order_03",
+      "description": "商品明细：shipped",
+      "turns": [
+        "ORD-20240115-001 买了什么商品？帮我核对一下。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "Nike"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "order_04",
+      "description": "当前状态：pending",
+      "turns": [
+        "请查一下订单 ORD-20240120-002 的当前状态。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "ORD-20240120-002"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "order_05",
+      "description": "下单金额：pending",
+      "turns": [
+        "订单 ORD-20240120-002 是什么时候下单的，实付多少钱？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "ORD-20240120-002"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "order_06",
+      "description": "商品明细：pending",
+      "turns": [
+        "ORD-20240120-002 买了什么商品？帮我核对一下。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "AirPods"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "order_07",
+      "description": "当前状态：delivered",
+      "turns": [
+        "请查一下订单 ORD-20240110-003 的当前状态。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "ORD-20240110-003"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "order_08",
+      "description": "下单金额：delivered",
+      "turns": [
+        "订单 ORD-20240110-003 是什么时候下单的，实付多少钱？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "ORD-20240110-003"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "order_09",
+      "description": "商品明细：delivered",
+      "turns": [
+        "ORD-20240110-003 买了什么商品？帮我核对一下。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "小米"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "order_10",
+      "description": "当前状态：refund_processing",
+      "turns": [
+        "请查一下订单 ORD-20240118-004 的当前状态。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "ORD-20240118-004"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "order_11",
+      "description": "下单金额：refund_processing",
+      "turns": [
+        "订单 ORD-20240118-004 是什么时候下单的，实付多少钱？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "ORD-20240118-004"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "order_12",
+      "description": "商品明细：refund_processing",
+      "turns": [
+        "ORD-20240118-004 买了什么商品？帮我核对一下。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "Levi"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "order_13",
+      "description": "当前状态：pending",
+      "turns": [
+        "请查一下订单 ORD-20240122-005 的当前状态。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "ORD-20240122-005"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "order_14",
+      "description": "下单金额：pending",
+      "turns": [
+        "订单 ORD-20240122-005 是什么时候下单的，实付多少钱？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "ORD-20240122-005"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "order_15",
+      "description": "商品明细：pending",
+      "turns": [
+        "ORD-20240122-005 买了什么商品？帮我核对一下。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "戴森"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "logistics_01",
+      "description": "物流查询：shipped",
+      "turns": [
+        "订单 ORD-20240115-001 的物流到哪了？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "顺丰速运"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order",
+        "query_logistics"
+      ],
+      "min_tool_calls": 2,
+      "max_tokens": 18000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "logistics_02",
+      "description": "物流查询：shipped",
+      "turns": [
+        "帮我看一下 ORD-20240115-001 的快递轨迹和承运商。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "顺丰速运"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order",
+        "query_logistics"
+      ],
+      "min_tool_calls": 2,
+      "max_tokens": 18000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "logistics_03",
+      "description": "物流查询：shipped",
+      "turns": [
+        "ORD-20240115-001 现在有运单号吗，预计什么时候到？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "顺丰速运"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order",
+        "query_logistics"
+      ],
+      "min_tool_calls": 2,
+      "max_tokens": 18000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "logistics_04",
+      "description": "物流查询：pending",
+      "turns": [
+        "订单 ORD-20240120-002 的物流到哪了？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "发货"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 18000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "logistics_05",
+      "description": "物流查询：pending",
+      "turns": [
+        "帮我看一下 ORD-20240120-002 的快递轨迹和承运商。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "发货"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 18000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "logistics_06",
+      "description": "物流查询：pending",
+      "turns": [
+        "ORD-20240120-002 现在有运单号吗，预计什么时候到？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "发货"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 18000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "logistics_07",
+      "description": "物流查询：delivered",
+      "turns": [
+        "订单 ORD-20240110-003 的物流到哪了？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "京东物流"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order",
+        "query_logistics"
+      ],
+      "min_tool_calls": 2,
+      "max_tokens": 18000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "logistics_08",
+      "description": "物流查询：delivered",
+      "turns": [
+        "帮我看一下 ORD-20240110-003 的快递轨迹和承运商。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "京东物流"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order",
+        "query_logistics"
+      ],
+      "min_tool_calls": 2,
+      "max_tokens": 18000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "logistics_09",
+      "description": "物流查询：delivered",
+      "turns": [
+        "ORD-20240110-003 现在有运单号吗，预计什么时候到？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "京东物流"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order",
+        "query_logistics"
+      ],
+      "min_tool_calls": 2,
+      "max_tokens": 18000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "logistics_10",
+      "description": "物流查询：refund_processing",
+      "turns": [
+        "订单 ORD-20240118-004 的物流到哪了？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "圆通速递"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order",
+        "query_logistics"
+      ],
+      "min_tool_calls": 2,
+      "max_tokens": 18000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "logistics_11",
+      "description": "物流查询：refund_processing",
+      "turns": [
+        "帮我看一下 ORD-20240118-004 的快递轨迹和承运商。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "圆通速递"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order",
+        "query_logistics"
+      ],
+      "min_tool_calls": 2,
+      "max_tokens": 18000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "logistics_12",
+      "description": "物流查询：refund_processing",
+      "turns": [
+        "ORD-20240118-004 现在有运单号吗，预计什么时候到？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "圆通速递"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order",
+        "query_logistics"
+      ],
+      "min_tool_calls": 2,
+      "max_tokens": 18000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "logistics_13",
+      "description": "物流查询：pending",
+      "turns": [
+        "订单 ORD-20240122-005 的物流到哪了？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "发货"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 18000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "logistics_14",
+      "description": "物流查询：pending",
+      "turns": [
+        "帮我看一下 ORD-20240122-005 的快递轨迹和承运商。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "发货"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 18000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "logistics_15",
+      "description": "物流查询：pending",
+      "turns": [
+        "ORD-20240122-005 现在有运单号吗，预计什么时候到？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "发货"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 18000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "product_01",
+      "description": "商品咨询：SHOE-270-BK-42",
+      "turns": [
+        "商品Nike Air Max 270 运动鞋还有库存吗？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "Nike"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_02",
+      "description": "商品咨询：SHOE-270-BK-42",
+      "turns": [
+        "Nike Air Max 270 运动鞋现在卖多少钱？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "Nike"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_03",
+      "description": "商品咨询：SHOE-270-BK-42",
+      "turns": [
+        "Nike Air Max 270 运动鞋有哪些规格和卖点？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "Nike"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_04",
+      "description": "商品咨询：ELEC-APP-002",
+      "turns": [
+        "商品Apple AirPods Pro 2还有库存吗？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "AirPods"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_05",
+      "description": "商品咨询：ELEC-APP-002",
+      "turns": [
+        "Apple AirPods Pro 2现在卖多少钱？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "AirPods"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_06",
+      "description": "商品咨询：ELEC-APP-002",
+      "turns": [
+        "Apple AirPods Pro 2有哪些规格和卖点？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "AirPods"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_07",
+      "description": "商品咨询：PHONE-MI14U-BK",
+      "turns": [
+        "商品小米14 Ultra 手机还有库存吗？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "小米"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_08",
+      "description": "商品咨询：PHONE-MI14U-BK",
+      "turns": [
+        "小米14 Ultra 手机现在卖多少钱？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "小米"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_09",
+      "description": "商品咨询：PHONE-MI14U-BK",
+      "turns": [
+        "小米14 Ultra 手机有哪些规格和卖点？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "小米"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_10",
+      "description": "商品咨询：CLOTH-LEVI-501-30",
+      "turns": [
+        "商品Levi's 501 经典牛仔裤还有库存吗？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "Levi"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_11",
+      "description": "商品咨询：CLOTH-LEVI-501-30",
+      "turns": [
+        "Levi's 501 经典牛仔裤现在卖多少钱？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "Levi"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_12",
+      "description": "商品咨询：CLOTH-LEVI-501-30",
+      "turns": [
+        "Levi's 501 经典牛仔裤有哪些规格和卖点？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "Levi"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_13",
+      "description": "商品咨询：HOME-DYSON-V15",
+      "turns": [
+        "商品戴森 V15 Detect 吸尘器还有库存吗？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "戴森"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_14",
+      "description": "商品咨询：HOME-DYSON-V15",
+      "turns": [
+        "戴森 V15 Detect 吸尘器现在卖多少钱？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "戴森"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_15",
+      "description": "商品咨询：HOME-DYSON-V15",
+      "turns": [
+        "戴森 V15 Detect 吸尘器有哪些规格和卖点？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "戴森"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_16",
+      "description": "商品咨询：ACC-AP-CASE-01",
+      "turns": [
+        "商品AirPods 保护壳（透明）还有库存吗？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "保护壳"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_17",
+      "description": "商品咨询：ACC-AP-CASE-01",
+      "turns": [
+        "AirPods 保护壳（透明）现在卖多少钱？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "保护壳"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "product_18",
+      "description": "商品咨询：ACC-AP-CASE-01",
+      "turns": [
+        "AirPods 保护壳（透明）有哪些规格和卖点？"
+      ],
+      "expected_intent": "PRODUCT_CONSULT",
+      "expected_keywords": [
+        "保护壳"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_product"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "presale"
+    },
+    {
+      "id": "return_policy_01",
+      "description": "知识库政策检索",
+      "turns": [
+        "七天无理由退货需要满足什么条件？"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "七天"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "return_policy_02",
+      "description": "知识库政策检索",
+      "turns": [
+        "商品有质量问题可以在多久内申请退换？"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "质量"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "return_policy_03",
+      "description": "知识库政策检索",
+      "turns": [
+        "七天无理由退货的运费谁承担？"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "运费"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "return_policy_04",
+      "description": "知识库政策检索",
+      "turns": [
+        "退款审核通过后多久能到账？"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "退款"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "return_policy_05",
+      "description": "知识库政策检索",
+      "turns": [
+        "一笔订单里能只退其中一件商品吗？"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "部分退款"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "shipping_policy_01",
+      "description": "知识库政策检索",
+      "turns": [
+        "订单多少元可以包邮？"
+      ],
+      "expected_keywords": [
+        "99"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000
+    },
+    {
+      "id": "shipping_policy_02",
+      "description": "知识库政策检索",
+      "turns": [
+        "偏远地区配送是否加收运费？"
+      ],
+      "expected_keywords": [
+        "偏远"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000
+    },
+    {
+      "id": "shipping_policy_03",
+      "description": "知识库政策检索",
+      "turns": [
+        "我能指定承运快递公司吗？"
+      ],
+      "expected_keywords": [
+        "快递"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000
+    },
+    {
+      "id": "shipping_policy_04",
+      "description": "知识库政策检索",
+      "turns": [
+        "普通快递送到一线城市通常要多久？"
+      ],
+      "expected_keywords": [
+        "配送"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000
+    },
+    {
+      "id": "shipping_policy_05",
+      "description": "知识库政策检索",
+      "turns": [
+        "物流三天没更新该怎么处理？"
+      ],
+      "expected_keywords": [
+        "物流"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "member_policy_01",
+      "description": "知识库政策检索",
+      "turns": [
+        "钻石会员能享受什么退货权益？"
+      ],
+      "expected_keywords": [
+        "无忧退"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000
+    },
+    {
+      "id": "member_policy_02",
+      "description": "知识库政策检索",
+      "turns": [
+        "黄金会员有哪些包邮权益？"
+      ],
+      "expected_keywords": [
+        "包邮"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000
+    },
+    {
+      "id": "member_policy_03",
+      "description": "知识库政策检索",
+      "turns": [
+        "消费后积分是怎么计算的？"
+      ],
+      "expected_keywords": [
+        "积分"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000
+    },
+    {
+      "id": "member_policy_04",
+      "description": "知识库政策检索",
+      "turns": [
+        "会员等级能手动升级吗？"
+      ],
+      "expected_keywords": [
+        "升级"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000
+    },
+    {
+      "id": "member_policy_05",
+      "description": "知识库政策检索",
+      "turns": [
+        "会员收费吗，需要交年费吗？"
+      ],
+      "expected_keywords": [
+        "免费"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000
+    },
+    {
+      "id": "faq_policy_01",
+      "description": "知识库政策检索",
+      "turns": [
+        "下单后一般多久发货？"
+      ],
+      "expected_keywords": [
+        "48"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "faq_policy_02",
+      "description": "知识库政策检索",
+      "turns": [
+        "平台支持哪些支付方式？"
+      ],
+      "expected_keywords": [
+        "支付宝"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000
+    },
+    {
+      "id": "faq_policy_03",
+      "description": "知识库政策检索",
+      "turns": [
+        "未发货的订单还能修改收货地址吗？"
+      ],
+      "expected_keywords": [
+        "地址"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "faq_policy_04",
+      "description": "知识库政策检索",
+      "turns": [
+        "商品降价后还能申请价保吗？"
+      ],
+      "expected_keywords": [
+        "价保"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000
+    },
+    {
+      "id": "faq_policy_05",
+      "description": "知识库政策检索",
+      "turns": [
+        "退款到银行卡一般多久？"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "银行卡"
+      ],
+      "expected_tools": [
+        "search_knowledge"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 13000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "refund_01",
+      "description": "退款咨询：shipped",
+      "turns": [
+        "我想退订单 ORD-20240115-001，请先查一下现在是什么状态。"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "退款"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "refund_02",
+      "description": "退款咨询：shipped",
+      "turns": [
+        "订单 ORD-20240115-001 想申请退款，帮我确认目前进度和下一步。"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "退款"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "refund_03",
+      "description": "退款咨询：pending",
+      "turns": [
+        "我想退订单 ORD-20240120-002，请先查一下现在是什么状态。"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "退款"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "refund_04",
+      "description": "退款咨询：pending",
+      "turns": [
+        "订单 ORD-20240120-002 想申请退款，帮我确认目前进度和下一步。"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "退款"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "refund_05",
+      "description": "退款咨询：delivered",
+      "turns": [
+        "我想退订单 ORD-20240110-003，请先查一下现在是什么状态。"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "退款"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "refund_06",
+      "description": "退款咨询：delivered",
+      "turns": [
+        "订单 ORD-20240110-003 想申请退款，帮我确认目前进度和下一步。"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "退款"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "refund_07",
+      "description": "退款咨询：refund_processing",
+      "turns": [
+        "我想退订单 ORD-20240118-004，请先查一下现在是什么状态。"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "退款"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "refund_08",
+      "description": "退款咨询：refund_processing",
+      "turns": [
+        "订单 ORD-20240118-004 想申请退款，帮我确认目前进度和下一步。"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "退款"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "refund_09",
+      "description": "退款咨询：pending",
+      "turns": [
+        "我想退订单 ORD-20240122-005，请先查一下现在是什么状态。"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "退款"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "refund_10",
+      "description": "退款咨询：pending",
+      "turns": [
+        "订单 ORD-20240122-005 想申请退款，帮我确认目前进度和下一步。"
+      ],
+      "expected_intent": "RETURN_REQUEST",
+      "expected_keywords": [
+        "退款"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 15000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "list_orders_01",
+      "description": "按已知用户名列出订单",
+      "turns": [
+        "我叫小明，请列出我的订单。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "Nike"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "list_user_orders"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 10000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "list_orders_02",
+      "description": "按已知用户名列出订单",
+      "turns": [
+        "我叫小红，请列出我的订单。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "AirPods"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "list_user_orders"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 10000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "list_orders_03",
+      "description": "按已知用户名列出订单",
+      "turns": [
+        "我叫大壮，请列出我的订单。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "小米"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "list_user_orders"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 10000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "list_orders_04",
+      "description": "按已知用户名列出订单",
+      "turns": [
+        "我叫小丽，请列出我的订单。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "Levi"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "list_user_orders"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 10000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "list_orders_05",
+      "description": "按已知用户名列出订单",
+      "turns": [
+        "我叫阿杰，请列出我的订单。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "戴森"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "list_user_orders"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 10000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "multi_turn_01",
+      "description": "跨轮次补充订单号",
+      "turns": [
+        "帮我看看之前下的订单。",
+        "订单号是 ORD-20240115-001。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "Nike"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 26000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "multi_turn_02",
+      "description": "跨轮次补充订单号",
+      "turns": [
+        "帮我看看之前下的订单。",
+        "订单号是 ORD-20240120-002。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "AirPods"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 26000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "multi_turn_03",
+      "description": "跨轮次补充订单号",
+      "turns": [
+        "帮我看看之前下的订单。",
+        "订单号是 ORD-20240110-003。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "小米"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 26000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "multi_turn_04",
+      "description": "跨轮次补充订单号",
+      "turns": [
+        "帮我看看之前下的订单。",
+        "订单号是 ORD-20240118-004。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "Levi"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 26000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "multi_turn_05",
+      "description": "跨轮次补充订单号",
+      "turns": [
+        "帮我看看之前下的订单。",
+        "订单号是 ORD-20240122-005。"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "戴森"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order"
+      ],
+      "min_tool_calls": 1,
+      "max_tokens": 26000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "multi_turn_06",
+      "description": "跨轮次追问物流",
+      "turns": [
+        "查一下订单 ORD-20240115-001。",
+        "再帮我看一下快递目前到哪了？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "顺丰速运"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order",
+        "query_logistics"
+      ],
+      "min_tool_calls": 2,
+      "max_tokens": 26000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "multi_turn_07",
+      "description": "跨轮次追问物流",
+      "turns": [
+        "查一下订单 ORD-20240110-003。",
+        "再帮我看一下快递目前到哪了？"
+      ],
+      "expected_intent": "ORDER_QUERY",
+      "expected_keywords": [
+        "京东物流"
+      ],
+      "expected_requires_human": false,
+      "expected_tools": [
+        "query_order",
+        "query_logistics"
+      ],
+      "min_tool_calls": 2,
+      "max_tokens": 26000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "complaint_01",
+      "description": "明确投诉并请求升级",
+      "turns": [
+        "你们的服务态度太差了，我要正式投诉并转人工处理！"
+      ],
+      "expected_intent": "COMPLAINT",
+      "expected_requires_human": true,
+      "max_tokens": 13000,
+      "expected_route": "complaint"
+    },
+    {
+      "id": "complaint_02",
+      "description": "明确投诉并请求升级",
+      "turns": [
+        "商品质量有问题还不给解决，我要投诉，请人工客服介入。"
+      ],
+      "expected_intent": "COMPLAINT",
+      "expected_requires_human": true,
+      "max_tokens": 13000,
+      "expected_route": "complaint"
+    },
+    {
+      "id": "complaint_03",
+      "description": "明确投诉并请求升级",
+      "turns": [
+        "我对这次配送服务非常不满，要求投诉并找负责人处理。"
+      ],
+      "expected_intent": "COMPLAINT",
+      "expected_requires_human": true,
+      "max_tokens": 13000,
+      "expected_route": "complaint"
+    },
+    {
+      "id": "complaint_04",
+      "description": "明确投诉并请求升级",
+      "turns": [
+        "你们反复推诿退款问题，我要投诉并转接人工客服。"
+      ],
+      "expected_intent": "COMPLAINT",
+      "expected_requires_human": true,
+      "max_tokens": 13000,
+      "expected_route": "complaint"
+    },
+    {
+      "id": "complaint_05",
+      "description": "明确投诉并请求升级",
+      "turns": [
+        "收到的商品明显破损，我很生气，要求投诉并升级处理！"
+      ],
+      "expected_intent": "COMPLAINT",
+      "expected_requires_human": true,
+      "max_tokens": 13000,
+      "expected_route": "complaint"
+    },
+    {
+      "id": "greeting_01",
+      "description": "纯问候",
+      "turns": [
+        "你好。"
+      ],
+      "expected_intent": "GREETING",
+      "expected_requires_human": false,
+      "min_tool_calls": 0,
+      "max_tokens": 7000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "greeting_02",
+      "description": "纯问候",
+      "turns": [
+        "早上好！"
+      ],
+      "expected_intent": "GREETING",
+      "expected_requires_human": false,
+      "min_tool_calls": 0,
+      "max_tokens": 7000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "greeting_03",
+      "description": "纯问候",
+      "turns": [
+        "嗨，小夕。"
+      ],
+      "expected_intent": "GREETING",
+      "expected_requires_human": false,
+      "min_tool_calls": 0,
+      "max_tokens": 7000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "greeting_04",
+      "description": "纯问候",
+      "turns": [
+        "在吗？"
+      ],
+      "expected_intent": "GREETING",
+      "expected_requires_human": false,
+      "min_tool_calls": 0,
+      "max_tokens": 7000,
+      "expected_route": "postsale"
+    },
+    {
+      "id": "greeting_05",
+      "description": "纯问候",
+      "turns": [
+        "先跟你打个招呼，您好。"
+      ],
+      "expected_intent": "GREETING",
+      "expected_requires_human": false,
+      "min_tool_calls": 0,
+      "max_tokens": 7000,
+      "expected_route": "postsale"
+    }
+  ]
+}
